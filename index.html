@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js"></script>
+<script src="/jquery.svg.min.js"></script>
+  <meta charset="utf-8">
+  <title>US Counties</title>
+  <script>
+  	var doc;
+  	$(function(){
+		// Creates canvas 320 × 200 at 10, 50
+		var paper = Raphael("canvas");
+		// Setting preserveAspectRatio to 'none' lets you stretch the SVG
+		paper.canvas.setAttribute('preserveAspectRatio', 'none');
+		
+		$.get('/counties.json', function(data){
+			data.forEach(function(item){
+				var thisPath = paper.path(item.PathString);
+				thisPath.id = item.FIPS;
+				thisPath.name = item.County;
+				thisPath.attr({"stroke-width":".5"});
+				thisPath.mouseover(function (e) {countyMouseOver(e)});
+			});
+		});
+		
+		
+		
+		function countyMouseOver(e) {
+			//Retrieve the mouseover target as a Raphael object
+			//var raph = e.target.raphael;
+			console.log(e.toElement);
+			//Use this to display a callout or whatever
+			//var thisCountyName = raph.name;
+			//Change the color of the county's edges to indicate selection
+			//raph.attr({stroke:"#FF0000", "stroke-width":"1"});
+			//Get ready for a click
+			//thisPath.click(function (e) {countyClick(e)});
+		}
+		
+		function countyClick(e) {
+			var thisID = e.target.raphael.id;
+			console.log(thisID);
+		}
+		
+  	});
+  </script>
+</head>
+<body>
+	<h1>Counties!</h1>
+	<div id="canvas"></div>
+</body>
+</html>
